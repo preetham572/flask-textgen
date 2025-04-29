@@ -2,93 +2,89 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Text Generator ✨</title>
+    <title>AI Text Generator | Preetham</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
-            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+            margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1c1f2b, #3e4b64);
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            height: 100vh;
-            margin: 0;
-            padding-top: 50px;
+            min-height: 100vh;
+            padding: 40px 20px;
         }
         h1 {
-            color: #fff;
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.2rem;
+            color: #c0c9d6;
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 40px;
         }
         form {
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            width: 90%;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.25);
         }
         textarea {
             width: 100%;
-            height: 150px;
             padding: 15px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
             border-radius: 10px;
-            resize: none;
+            border: none;
+            resize: vertical;
+            min-height: 120px;
+            font-size: 1rem;
             margin-bottom: 20px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
         button {
-            background: #6a11cb;
-            background: linear-gradient(90deg, #2575fc, #6a11cb);
+            padding: 12px 24px;
+            background: #4fd1c5;
             border: none;
-            border-radius: 50px;
-            padding: 15px 30px;
-            color: #fff;
+            border-radius: 30px;
             font-size: 1rem;
+            color: #000;
             cursor: pointer;
             transition: background 0.3s ease;
         }
         button:hover {
-            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            background: #38b2ac;
         }
-        .response {
+        .response-box {
             margin-top: 30px;
-            background: #ffffff;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            width: 90%;
-            max-width: 600px;
-            word-wrap: break-word;
-            color: #333;
-            font-size: 1.1rem;
-        }
-        .response h2 {
-            margin-top: 0;
-            color: #6a11cb;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #e2e8f0;
+            white-space: pre-line;
+            font-size: 1rem;
         }
     </style>
 </head>
 <body>
-
-    <h1>Text Generator ✨</h1>
+    <h1>✨ AI Text Generator ✨</h1>
+    <p>Enter a prompt and let the magic of AI generate meaningful text for you. Powered by OpenAI & Flask.</p>
     <form method="POST">
-        <textarea name="prompt" placeholder="Type your prompt here..." required></textarea>
+        <textarea name="prompt" placeholder="Enter your prompt here..." required></textarea>
         <button type="submit">Generate Text</button>
     </form>
-
     {% if response %}
-    <div class="response">
-        <h2>Generated Text:</h2>
+    <div class="response-box">
+        <h3>Generated Text:</h3>
         <p>{{ response }}</p>
     </div>
     {% endif %}
-
 </body>
 </html>
