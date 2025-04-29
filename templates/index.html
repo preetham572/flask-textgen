@@ -1,103 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>AI Text Generator | Preetham</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Text Generator</title>
   <style>
     body {
-      background: linear-gradient(135deg, #1c1f2b, #3e4b64);
-      font-family: 'Segoe UI', sans-serif;
-      color: #ffffff;
-      padding: 30px;
-    }
-    h1 {
+      background: linear-gradient(to right, #1e3a8a, #1e40af);
+      font-family: Arial, sans-serif;
+      color: #e2e8f0;
       text-align: center;
-      margin-bottom: 10px;
-    }
-    p.description {
-      text-align: center;
-      color: #c0c9d6;
-      margin-bottom: 40px;
-    }
-    form {
-      max-width: 700px;
-      margin: 0 auto 30px;
-      background: rgba(255, 255, 255, 0.08);
-      padding: 20px;
-      border-radius: 15px;
+      padding: 40px;
     }
     textarea {
       width: 100%;
+      max-width: 600px;
       padding: 15px;
       border-radius: 10px;
-      border: none;
       font-size: 1rem;
-      min-height: 100px;
+      margin-bottom: 15px;
     }
     button {
-      margin-top: 10px;
       padding: 10px 20px;
-      background: #4fd1c5;
+      background: #38bdf8;
       border: none;
       border-radius: 20px;
-      font-size: 1rem;
+      font-weight: bold;
       cursor: pointer;
       color: black;
     }
-    .response-box, .history-box {
-      max-width: 700px;
-      margin: 0 auto 20px;
-      background: rgba(255, 255, 255, 0.1);
+    .history {
+      margin-top: 40px;
+      background: rgba(255, 255, 255, 0.05);
       padding: 20px;
       border-radius: 10px;
-      white-space: pre-line;
-    }
-    .history-box {
-      margin-top: 30px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .history-item {
       margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
+      text-align: left;
     }
-    .prompt {
-      color: #c0c9d6;
-      font-weight: bold;
+    a {
+      color: #facc15;
     }
-    .response {
-      color: #e2e8f0;
-    }
+    #spinner:before {
+  content: "";
+  display: inline-block;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #38bdf8;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
   </style>
 </head>
 <body>
-  <h1>✨ AI Text Generator ✨</h1>
-  <p class="description">Enter a prompt and see AI-generated magic appear! Powered by Flask + OpenAI</p>
-
+  <h1>Welcome, {{ current_user.username }} 👋</h1>
   <form method="POST">
-    <textarea name="prompt" placeholder="Enter your prompt here..." required></textarea>
-    <button type="submit">Generate Text</button>
+    <textarea name="prompt" placeholder="Type your prompt here..." required></textarea><br>
+    <button type="submit">Generate</button>
   </form>
 
-  {% if response %}
-    <div class="response-box">
-      <h3>Generated Text:</h3>
-      <p>{{ response }}</p>
-    </div>
-  {% endif %}
+  <div class="history">
+    <h2>Your History</h2>
+    {% for item in history %}
+      <div class="history-item">
+        <strong>Prompt:</strong> {{ item.prompt }}<br>
+        <strong>Response:</strong> {{ item.response }}
+      </div>
+    {% endfor %}
+  </div>
 
-  {% if history %}
-    <div class="history-box">
-      <h3>Previous Generations:</h3>
-      {% for item in history %}
-        <div class="history-item">
-          <div class="prompt">📝 Prompt:</div>
-          <div class="response">{{ item.prompt }}</div>
-          <div class="prompt">🎯 Response:</div>
-          <div class="response">{{ item.response }}</div>
-        </div>
-      {% endfor %}
-    </div>
-  {% endif %}
+  <br>
+  <a href="{{ url_for('logout') }}">Logout</a>
+  <script>
+    const form = document.querySelector("form");
+    form.addEventListener("submit", () => {
+      const spinner = document.createElement("div");
+      spinner.id = "spinner";
+      spinner.innerHTML = `
+        <div style="margin-top:20px; font-weight:bold;">⏳ Generating your response...</div>
+      `;
+      document.body.appendChild(spinner);
+    });
+  </script>
 </body>
 </html>
