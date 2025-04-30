@@ -4,20 +4,40 @@
   <title>AI Text Generator</title>
   <style>
     body {
-      background: linear-gradient(to right, #1e3a8a, #1e40af);
+      background: #0f172a;
       font-family: Arial, sans-serif;
       color: #e2e8f0;
-      text-align: center;
-      padding: 40px;
+      margin: 0;
+      padding: 0;
     }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .left, .right {
+      padding: 30px;
+    }
+
+    .left {
+      flex: 2;
+    }
+
+    .right {
+      flex: 1;
+      background: #1e293b;
+      overflow-y: auto;
+    }
+
     textarea {
       width: 100%;
-      max-width: 600px;
       padding: 15px;
-      border-radius: 10px;
       font-size: 1rem;
-      margin-bottom: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
     }
+
     button {
       padding: 10px 20px;
       background: #38bdf8;
@@ -27,70 +47,74 @@
       cursor: pointer;
       color: black;
     }
-    .history {
-      margin-top: 40px;
-      background: rgba(255, 255, 255, 0.05);
+
+    .current-response {
+      margin-top: 20px;
+      background: #1e40af;
       padding: 20px;
       border-radius: 10px;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
+      white-space: pre-line;
     }
+
+    .history-title {
+      font-weight: bold;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
     .history-item {
       margin-bottom: 20px;
-      text-align: left;
+      background: #334155;
+      padding: 10px;
+      border-radius: 8px;
     }
-    a {
-      color: #facc15;
-    }
-    #spinner:before {
-  content: "";
-  display: inline-block;
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #38bdf8;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  animation: spin 1s linear infinite;
-  margin-right: 10px;
-  vertical-align: middle;
-}
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+    .prompt-label {
+      font-weight: bold;
+      color: #94a3b8;
+    }
+
+    .logout-link {
+      color: #facc15;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
-  <h1>Welcome, {{ current_user.username }} 👋</h1>
-  <form method="POST">
-    <textarea name="prompt" placeholder="Type your prompt here..." required></textarea><br>
-    <button type="submit">Generate</button>
-  </form>
+  <div class="container">
+    <!-- LEFT SIDE -->
+    <div class="left">
+      <h2>Welcome, {{ current_user.username }}</h2>
 
-  <div class="history">
-    <h2>Your History</h2>
-    {% for item in history %}
-      <div class="history-item">
-        <strong>Prompt:</strong> {{ item.prompt }}<br>
-        <strong>Response:</strong> {{ item.response }}
-      </div>
-    {% endfor %}
+      <form method="POST">
+        <textarea name="prompt" placeholder="Type your prompt here..." required></textarea><br>
+        <button type="submit">Generate</button>
+      </form>
+
+      {% if history and history[-1] %}
+        <div class="current-response">
+          <h3>🧠 AI Response:</h3>
+          <p>{{ history[-1].response }}</p>
+        </div>
+      {% endif %}
+
+      <a class="logout-link" href="{{ url_for('logout') }}">🚪 Logout</a>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right">
+      <div class="history-title">📜 Previous History</div>
+      {% for item in history[:-1] %}
+        <div class="history-item">
+          <div class="prompt-label">Prompt:</div>
+          <div>{{ item.prompt }}</div>
+          <div class="prompt-label" style="margin-top:10px;">Response:</div>
+          <div>{{ item.response }}</div>
+        </div>
+      {% endfor %}
+    </div>
   </div>
-
-  <br>
-  <a href="{{ url_for('logout') }}">Logout</a>
-  <script>
-    const form = document.querySelector("form");
-    form.addEventListener("submit", () => {
-      const spinner = document.createElement("div");
-      spinner.id = "spinner";
-      spinner.innerHTML = `
-        <div style="margin-top:20px; font-weight:bold;">⏳ Generating your response...</div>
-      `;
-      document.body.appendChild(spinner);
-    });
-  </script>
 </body>
 </html>
