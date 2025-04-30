@@ -69,15 +69,27 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        if User.query.filter_by(username=username).first():
+        print("➡️ Received:", username, password)
+
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            print("⚠️ Username exists")
             flash("Username already exists.")
             return redirect(url_for('register'))
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        new_user = User(username=username, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-        flash("Registration successful. Please log in.")
-        return redirect(url_for('login'))
+
+        try:
+            hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+            new_user = User(username=username, password=hashed_password)
+            db.session.add(new_user)
+            db.session.commit()
+            print("✅ User registered")
+            flash("Registration successful. Please log in.")
+            return redirect(url_for('login'))
+        except Exception as e:
+            print("❌ DB Error:", e)
+            flash("Something went wrong.")
+            return redirect(url_for('register'))
+
     return render_template("register.html")
 
 # Login route
