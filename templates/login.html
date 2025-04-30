@@ -37,11 +37,36 @@
     }
     a {
       color: #38bdf8;
+      text-decoration: none;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+    li {
+      background: #16a34a;
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 5px;
     }
   </style>
 </head>
 <body>
   <h1>Login</h1>
+
+  <!-- ✅ Flash Messages (for "Registration successful") -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
   <form method="POST">
     <input type="text" name="username" placeholder="Username" required />
     <input type="password" name="password" placeholder="Password" required />
